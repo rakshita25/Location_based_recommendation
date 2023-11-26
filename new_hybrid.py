@@ -124,7 +124,7 @@ def evaluate_recommendations(test_set, user_features, latent_matrix, num_recomme
         f1 = 2 * (precision * recall) / (precision + recall) if precision + recall > 0 else 0
 
         # Calculate RMSE
-        rmse = np.sqrt(mean_squared_error(actual_ratings[:len(predicted_ratings)], predicted_ratings))
+        rmse = np.sqrt(mean_squared_error(actual_ratings, predicted_ratings))
 
         precision_scores.append(precision)
         recall_scores.append(recall)
