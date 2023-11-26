@@ -84,9 +84,6 @@ print(recommended_movies)
 
 from sklearn.metrics import precision_score, recall_score, f1_score
 
-# Assume you have a test set with user-item interactions for evaluation
-# You may split your existing dataset into training and testing sets, or have a separate evaluation dataset
-
 # Example: Create a test set by randomly selecting some ratings from the original dataset
 test_set = user_movie_matrix.sample(frac=0.2, random_state=42)
 
