@@ -30,19 +30,19 @@ print("SVD Done")
 user_features = pd.DataFrame(latent_matrix, index=user_movie_matrix.index)
 
 # Combine genre and location data into a single string column
-df['content_features'] = df['genres'] + ' ' + df['address']
+#df['content_features'] = df['genres'] + ' ' + df['address']
 
 # Creating a TF-IDF Vectorizer
-tfidf = TfidfVectorizer(stop_words='english', min_df=0.01)
-tfidf_matrix = tfidf.fit_transform(df['content_features'])
-print(tfidf_matrix.shape)
+#tfidf = TfidfVectorizer(stop_words='english', min_df=0.01)
+#tfidf_matrix = tfidf.fit_transform(df['content_features'])
+#print(tfidf_matrix.shape)
 # Compute cosine similarity matrix
-cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
+#cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
 
-print("Cosine similarity Done") 
+#print("Cosine similarity Done") 
 
 # Create a mapping of movie ID to index in the DataFrame
-movie_idx = pd.Series(df.index, index=df['movieId']).drop_duplicates()
+m#ovie_idx = pd.Series(df.index, index=df['movieId']).drop_duplicates()
 
 def get_recommendations(user_id, num_recommendations=5):
     # Get user features
