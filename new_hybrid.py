@@ -43,7 +43,7 @@ user_features = pd.DataFrame(latent_matrix, index=user_movie_matrix.index)
 # Compute cosine similarity matrix
 #cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
 
-#print("Cosine similarity Done") 
+print("Cosine similarity Done") 
 
 # Create a mapping of movie ID to index in the DataFrame
 #movie_idx = pd.Series(df.index, index=df['movieId']).drop_duplicates()
@@ -84,23 +84,14 @@ def get_recommendations(user_id, num_recommendations=5):
 
 # Example Usage
 recommended_movies = get_recommendations(user_id=1)
-print(recommended_movies)
-
-from sklearn.metrics import precision_score, recall_score, f1_score
-
-# Assume you have a test set with user-item interactions for evaluation
-# You may split your existing dataset into training and testing sets, or have a separate evaluation dataset
+print("Recommended Movie Ids : ",recommended_movies)
 
 # Example: Create a test set by randomly selecting some ratings from the original dataset
 test_set = user_movie_matrix.sample(frac=0.2, random_state=42)
 
-from sklearn.metrics import accuracy_score
-
 # Modify the evaluate_recommendations function to include accuracy
 def evaluate_recommendations(test_set, user_features, latent_matrix, num_recommendations=5):
-    precision_scores = []
-    recall_scores = []
-    f1_scores = []
+
     rmse_scores = []
 
     for user_id in test_set.index:
@@ -114,35 +105,16 @@ def evaluate_recommendations(test_set, user_features, latent_matrix, num_recomme
         # Find indices of top N recommendations
         top_recommendations = np.argsort(predicted_ratings)[0][::-1][:num_recommendations]
 
-        # Evaluate precision, recall, and F1-score
-        true_positives = len(set(top_recommendations) & set(np.where(actual_ratings > 0)[1]))
-        false_positives = len(set(top_recommendations) - set(np.where(actual_ratings > 0)[1]))
-        false_negatives = len(set(np.where(actual_ratings > 0)[1]) - set(top_recommendations))
-
-        precision = true_positives / (true_positives + false_positives) if true_positives + false_positives > 0 else 0
-        recall = true_positives / (true_positives + false_negatives) if true_positives + false_negatives > 0 else 0
-        f1 = 2 * (precision * recall) / (precision + recall) if precision + recall > 0 else 0
-
         # Calculate RMSE
         rmse = np.sqrt(mean_squared_error(actual_ratings, predicted_ratings))
-
-        precision_scores.append(precision)
-        recall_scores.append(recall)
-        f1_scores.append(f1)
         rmse_scores.append(rmse)
 
     # Calculate average metrics over all users
-    avg_precision = sum(precision_scores) / len(precision_scores)
-    avg_recall = sum(recall_scores) / len(recall_scores)
-    avg_f1 = sum(f1_scores) / len(f1_scores)
     avg_rmse = sum(rmse_scores) / len(rmse_scores)
 
-    return avg_precision, avg_recall, avg_f1, avg_rmse
+    return avg_rmse
 
 # Example usage
-avg_precision, avg_recall, avg_f1, avg_rmse = evaluate_recommendations(test_set, user_features, latent_matrix)
-print(f"Average Precision: {avg_precision:.2f}")
-print(f"Average Recall: {avg_recall:.2f}")
-print(f"Average F1-score: {avg_f1:.2f}")
+avg_rmse = evaluate_recommendations(test_set, user_features, latent_matrix)
 print(f"Average RMSE: {avg_rmse:.2f}")
 
